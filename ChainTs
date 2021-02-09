@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+
+/**
+ * Part of ChainTs shared under LGPL-3.0
+ * Copyright (C) 2021 Using Blockchain Ltd, Reg No.: 12658136, United Kingdom
+ */
+require(__dirname + '/build/ChainTs.js')
