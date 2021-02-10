@@ -7,13 +7,17 @@ import {Command, Options, option} from 'clime';
 export class ProcessInputs extends Options {
   @option({
     flag: 'd',
+    required: false,
     description: 'Enables debug mode',
+    toggle: true,
   })
   debug: boolean;
 
   @option({
     flag: 'q',
+    required: false,
     description: 'Enables quiet mode',
+    toggle: true,
   })
   quiet: boolean;
 }

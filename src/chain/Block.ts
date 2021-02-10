@@ -20,14 +20,14 @@ export class Block {
   public blockHash: string
 
   /**
-   * Construct a block model.
+   * Construct a block instance.
    *
-   * @param   number  height 
-   * @param   string  previousHash 
-   * @param   number  timestamp 
-   * @param   string  data 
-   * @param   number  difficulty 
-   * @param   number  nonce 
+   * @param   number  height          The block height (or index).
+   * @param   string  previousHash    The previous block hash.
+   * @param   number  timestamp       The timestamp (date of creation).
+   * @param   string  data            The data added to the block.
+   * @param   number  difficulty      The difficulty for mining this block.
+   * @param   number  nonce           The nonce at which to start mining.
    */
   protected constructor(
     public readonly height: number,
@@ -76,7 +76,8 @@ export class Block {
       '#' + this.height + ' ' +
       'Hash: ' + getShortened(this.blockHash) + '; ' +
       'Nonce: ' + this.nonce + '; ' +
-      'Previous: ' + getShortened(this.previousHash)
+      'Previous: ' + getShortened(this.previousHash) + '; ' +
+      'Time: ' + this.timestamp
     );
   }
 
