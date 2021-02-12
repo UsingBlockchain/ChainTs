@@ -10,8 +10,10 @@ export class Blockchain {
    * using \a difficulty number of leading zeros in 
    * the block hash.
    *
-   * @param   number    difficulty 
-   * @param   Block[]   blocks 
+   * @param   string      genesis     The genesis message. 
+   * @param   number      difficulty  The difficulty (number of leading zeroes).
+   * @param   Block[]     blocks      The blocks of the blockchain.
+   * @param   PeerToPeer  network     The peer-to-peer connection.
    */
   protected constructor(
     public readonly genesis: string,
@@ -20,10 +22,7 @@ export class Blockchain {
   ) {
     // - Blockchain always starts with genesis block
     var genesisBlock = Block.create(0, genesis, null, this.difficulty);
-    genesisBlock.mineBlock(this.difficulty);
-
-    // - Push block
-    this.blocks.push(genesisBlock);
+    this.appendBlock(genesisBlock)
   }
 
   /**
@@ -31,15 +30,16 @@ export class Blockchain {
    * \a difficulty number of leading zeros in the 
    * block hash.
    *
-   * @param   string  data        The data to be added to the genesis block.
-   * @param   number  difficulty  The difficulty or number of leading zeros.
+   * @param   string      data        The data to be added to the genesis block.
+   * @param   number      difficulty  The difficulty or number of leading zeros.
+   * @param   PeerToPeer  network     The peer-to-peer connection.
    * @return  Blockchain
    */
   public static create(
     data: string,
     difficulty: number,
   ): Blockchain {
-    return new Blockchain(data, difficulty)
+    return new Blockchain(data, difficulty, [])
   }
 
   /**

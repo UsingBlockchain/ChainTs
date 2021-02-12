@@ -10,7 +10,8 @@
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
       "strictPropertyInitialization": false,
-      "resolveJsonModule": false
+      "resolveJsonModule": false,
+      "esModuleInterop": true
     },
     "include": [
       "src/**/*.ts"

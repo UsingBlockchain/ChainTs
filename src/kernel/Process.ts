@@ -83,6 +83,18 @@ export abstract class Process extends Command {
   }
 
   /**
+   * Display a debug message (only with --debug).
+   *
+   * @param message 
+   */
+  public debug(message: string) {
+    // - Display only when debug flag is set
+    if (this.argv && 'debug' in this.argv && this.argv['debug']) {
+      console.log(message)
+    }
+  }
+
+  /**
    * Configures an executable process.
    *
    * @internal

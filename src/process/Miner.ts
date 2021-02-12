@@ -11,6 +11,7 @@ import { description } from './default'
 import { Block } from '../chain/Block'
 import { Blockchain } from '../chain/Blockchain'
 import { Auditor } from '../chain/Auditor';
+import { PeerToPeer } from '../network/PeerToPeer';
 
 export class MinerInputs extends ProcessInputs {
   @option({
@@ -138,9 +139,16 @@ export default class extends Process {
     let difficulty: number = inputs['difficulty']
     let maxBlocks: number = inputs['blocks']
 
+    // - Create a "peer-to-peer" initiator
+    const network: PeerToPeer = new PeerToPeer()
+
     // - Create genesis block (initialize blockchain)
     let blockchain: Blockchain = Blockchain.create(message, difficulty)
     this.log(chalk.yellow(blockchain.blocks[0].toString()))
+
+    // - Broadcast block to network
+    network.broadcastBlock(blockchain.blocks[0])
+    this.debug('Block #0  broadcast successfully.')
 
     // - Create at max `-b` blocks
     while(blockchain.blocks.length < maxBlocks) {
@@ -151,6 +159,10 @@ export default class extends Process {
       // - Start mining process
       blockchain.appendBlock(block)
       this.log(chalk.yellow(block.toString()))
+
+      // - Broadcast block to network
+      network.broadcastBlock(blockchain.blocks[0])
+      this.debug('Block #' + block.height + ' broadcast successfully.')
     }
 
     // - Audit the chain of blocks
