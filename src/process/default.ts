@@ -15,5 +15,9 @@ export const subcommands = [
   {
     name: 'Miner',
     brief: 'Disposable Blockchain Miner showcased in UBC Digital Magazine (https://ubc.digital)',
+  },
+  {
+    name: 'Validator',
+    brief: 'Disposable Blockchain Validator showcased in UBC Digital Magazine (https://ubc.digital)',
   }
 ];

@@ -4,8 +4,9 @@
  */
 import sha256 from 'fast-sha256';
 import {getShortened} from '../kernel/Helpers'
+import {Block as Contract} from '../contracts/Block'
 
-export class Block {
+export class Block implements Contract {
 
   /**
    * Binary data inside the block.
@@ -93,6 +94,8 @@ export class Block {
    * @param   number  height     The 0-starting height of the block (in the chain).
    * @param   string  data      (Optional) The data added to the block. Defaults to empty string.
    * @param   string  previous  (Optional) The previous block hash to link. Defaults to 32 zero-bytes.
+   * @param   number  difficulty      The difficulty for mining this block.
+   * @param   number  nonce           The nonce at which to start mining.
    * @return  Block   The formatted block model instance.
    */
   public static create(
@@ -111,16 +114,14 @@ export class Block {
    * Create a hexadecimal hash (32 bytes) of the block
    * using the `SHA-256` hashing algorithm.
    *
-   * This method construct a block payload which consists
+   * This method constructs a block payload which consists
    * in a concatenation of **hexadecimal notations** of 
    * parts of the block with the following format:
    *
    * block number || previous block hash || timestamp || difficulty || nonce || data
    *
-   * @param   number  height     The 0-starting height of the block (in the chain).
-   * @param   string  data      (Optional) The data added to the block. Defaults to empty string.
-   * @param   string  previous  (Optional) The previous block hash to link. Defaults to 32 zero-bytes.
-   * @return  Block   The formatted block model instance.
+   * @param   Block  block  The block for which a hash will be calculated.
+   * @return  string        The hexadecimal hash (32-bytes).
    */
   public static calculateHash(
     block: Block,
@@ -132,9 +133,10 @@ export class Block {
       + block.timestamp.toString(16)
       + block.difficulty.toString(16)
       + block.nonce.toString(16)
-      + block.binary.toString('hex')
+      + Buffer.from(block.binary).toString('hex')
     ), 'hex')
 
+    // - Hash the payload with sha256
     return Buffer.from(sha256(payload)).toString('hex');
   }
 }

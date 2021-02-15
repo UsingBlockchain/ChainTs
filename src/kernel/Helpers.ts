@@ -2,9 +2,6 @@
  * Part of ChainTs shared under LGPL-3.0
  * Copyright (C) 2021 Using Blockchain Ltd, Reg No.: 12658136, United Kingdom
  */
-
-import { Block } from "../chain/Block"
-
 /**
  * Get a shortened version of a string.
  *

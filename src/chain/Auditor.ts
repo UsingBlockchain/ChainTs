@@ -56,8 +56,8 @@ export class Auditor {
     }
 
     // - Retrieve block and previous block
-    const block: Block = this.chain.blocks[height]
-    const previous: Block = height > 0 ? this.chain.blocks[height-1] : null
+    const block: Block = this.chain.blocks[height] as Block
+    const previous: Block = height > 0 ? this.chain.blocks[height-1] as Block : null
 
     // - Check for height mismatch
     if (height !== block.height) {

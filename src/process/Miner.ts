@@ -1,5 +1,5 @@
 /**
- * Part of BlockSnippets shared under LGPL-3.0
+ * Part of ChainTs shared under LGPL-3.0
  * Copyright (C) 2021 Using Blockchain Ltd, Reg No.: 12658136, United Kingdom
  */
 import { command, metadata, option } from 'clime';
@@ -12,8 +12,15 @@ import { Block } from '../chain/Block'
 import { Blockchain } from '../chain/Blockchain'
 import { Auditor } from '../chain/Auditor';
 import { PeerToPeer } from '../network/PeerToPeer';
+import { Storage } from '../chain/Storage';
 
 export class MinerInputs extends ProcessInputs {
+  @option({
+    flag: 'n',
+    description: 'The name of the blockchain network.',
+  })
+  name: string;
+
   @option({
     flag: 'm',
     description: 'The message or data added to the genesis block.',
@@ -43,6 +50,12 @@ export default class extends Process {
    * @var string
    */
   protected secureDataHash: string = null
+
+  /**
+   * This is the file path in which blocks are stored.
+   * @var string
+   */
+  protected storagePath: string = null
 
   constructor() {
       super();
@@ -81,6 +94,13 @@ export default class extends Process {
     this.log(description)
 
     try {
+      inputs['name'] = OptionsResolver(argv,
+        'name',
+        () => { return ''; },
+        '\nEnter a name for the blockchain network: ');
+    } catch (err) { this.error('Please, enter a valid name.'); }
+
+    try {
       inputs['message'] = OptionsResolver(argv,
         'message',
         () => { return ''; },
@@ -114,6 +134,7 @@ export default class extends Process {
       this.log('')
       this.log(chalk.yellow('Data integrity verified: ') + chalk.green('Yes'))
       this.log(chalk.yellow('Secure blockchain hash:  ') + this.secureDataHash)
+      this.log(chalk.yellow('Blockchain storage path: ') + this.storagePath)
       this.log('')
 
       // - In quiet mode, log no more than secure data hash
@@ -144,11 +165,11 @@ export default class extends Process {
 
     // - Create genesis block (initialize blockchain)
     let blockchain: Blockchain = Blockchain.create(message, difficulty)
-    this.log(chalk.yellow(blockchain.blocks[0].toString()))
+    this.log(chalk.yellow((blockchain.blocks[0] as Block).toString()))
 
     // - Broadcast block to network
-    network.broadcastBlock(blockchain.blocks[0])
-    this.debug('Block #0  broadcast successfully.')
+    network.broadcastBlock(blockchain.blocks[0] as Block)
+    this.debug('Block #0 broadcast successfully.')
 
     // - Create at max `-b` blocks
     while(blockchain.blocks.length < maxBlocks) {
@@ -161,7 +182,7 @@ export default class extends Process {
       this.log(chalk.yellow(block.toString()))
 
       // - Broadcast block to network
-      network.broadcastBlock(blockchain.blocks[0])
+      network.broadcastBlock(block as Block)
       this.debug('Block #' + block.height + ' broadcast successfully.')
     }
 
@@ -173,6 +194,10 @@ export default class extends Process {
     if (true === verified) {
       this.secureDataHash = blockchain.blocks[numBlocks - 1].blockHash
     }
+
+    // - Store blockchain data
+    const storage = new Storage(inputs['name'], blockchain)
+    this.storagePath = storage.save()
 
     return new Promise((resolve) => resolve(verified));
   }

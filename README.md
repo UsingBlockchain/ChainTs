@@ -21,22 +21,18 @@ v12.18.4
 
 ## Instructions / Environment
 
-1. Clone the Project
+- Using NPM
 
 ```bash
-git clone https://github.com/UsingBlockchain/ChainTs
+$ npm install -g @ubcdigital/chaints
 ```
 
-2. Install the required dependencies.
+- Using Git
 
 ```bash
-cd ChainTs && npm install
-```
-
-3. Build
-
-```bash
-npm run build
+$ git clone https://github.com/UsingBlockchain/ChainTs
+$ cd ChainTs && npm install
+$ npm run build
 ```
 
 ## Examples
@@ -44,13 +40,19 @@ npm run build
 1. Create 5 blocks with hashes that hold a minimum of 3 leading zeros (few resources needed)
 
 ```bash
-./chaints Miner --difficulty 3 --blocks 5
+$ ./chaints Miner --difficulty 3 --blocks 5 -n my_blockchain
 ```
 
 2. Create 2 blocks with hashes that hold a minimum of 10 leading zeros  (more resources needed)
 
 ```bash
-./chaints Miner --difficulty 10 --blocks 2
+$ ./chaints Miner --difficulty 10 --blocks 2 -n my_blockchain
+```
+
+3. Validate / Audit a blockchain storage on filesystem
+
+```bash
+$ ./chaints Validator -n my_blockchain
 ```
 
 ## Donations / Pot de vin

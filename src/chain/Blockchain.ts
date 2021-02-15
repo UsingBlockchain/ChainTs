@@ -3,6 +3,7 @@
  * Copyright (C) 2021 Using Blockchain Ltd, Reg No.: 12658136, United Kingdom
  */
 import { Block } from './Block'
+import { Block as BlockContract } from '../contracts/Block'
 
 export class Blockchain {
   /**
@@ -20,9 +21,11 @@ export class Blockchain {
     public readonly difficulty: number,
     public readonly blocks: Block[] = [],
   ) {
-    // - Blockchain always starts with genesis block
-    var genesisBlock = Block.create(0, genesis, null, this.difficulty);
-    this.appendBlock(genesisBlock)
+    if (! this.blocks.length) {
+      // - Blockchain always starts with genesis block
+      var genesisBlock = Block.create(0, genesis, null, this.difficulty);
+      this.appendBlock(genesisBlock)
+    }
   }
 
   /**
@@ -40,6 +43,26 @@ export class Blockchain {
     difficulty: number,
   ): Blockchain {
     return new Blockchain(data, difficulty, [])
+  }
+
+  /**
+   * Re-create a chain of blocks from a storage
+   * contract.
+   *
+   * @param   BlockContract   blocks    The list of blocks from storage.
+   * @return  Blockchain
+   */
+  public static createFromStorage(
+    blocks: BlockContract[]
+  ): Blockchain {
+    // - Get first block data ("genesis data")
+    const genesis = blocks[0].data
+
+    // - Use last difficulty
+    const difficulty = blocks[blocks.length-1].difficulty
+
+    // - Re-create blockchain
+    return new Blockchain(genesis, difficulty, blocks.map((b) => b as Block))
   }
 
   /**

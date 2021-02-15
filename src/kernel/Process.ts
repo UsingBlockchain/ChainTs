@@ -1,5 +1,5 @@
 /**
- * Part of BlockSnippets shared under LGPL-3.0
+ * Part of ChainTs shared under LGPL-3.0
  * Copyright (C) 2021 Using Blockchain Ltd, Reg No.: 12658136, United Kingdom
  */
 import {Command, Options, option} from 'clime';
