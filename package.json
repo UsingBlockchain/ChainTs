@@ -1,7 +1,7 @@
 {
     "name": "@ubcdigital/chaints",
     "preferGlobal": true,
-    "version": "0.1.0",
+    "version": "0.2.0",
     "author": "Using Blockchain Ltd <info@ubc.digital>",
     "description": "ChainTs is a blockchain network as showcased in UBC Digital Magazine",
     "license": "LGPL-3.0",
